@@ -55,6 +55,22 @@ const TodoItemComponent: React.FC<{ todo: TodoItem }> = ({ todo }) => {
     dispatch(updateItem(updatedTodo));
   };
 
+  const handleDoubleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.preventDefault();
+    if (isEditing) {
+      return;
+    }
+
+    const updatedTodo: TodoItem = {
+      ...todo,
+      isEditable: true,
+    };
+
+    dispatch(updateItem(updatedTodo));
+    dispatch(setIsEditing(true));
+    setIsEditable(true);
+  };
+
   const handleTouchStart = (e: React.TouchEvent<HTMLSpanElement>) => {
     if (isEditing) {
       return;
@@ -88,7 +104,10 @@ const TodoItemComponent: React.FC<{ todo: TodoItem }> = ({ todo }) => {
           className="mx-4 w-full border-b-2 border-gray-500 focus:outline-none"
         />
       ) : (
-        <span onTouchStart={handleTouchStart} className="todo-title mx-4 overflow-hidden overflow-ellipsis whitespace-nowrap">
+        <span
+          onTouchStart={handleTouchStart}
+          onDoubleClick={handleDoubleClick}
+          className="todo-title mx-4 overflow-hidden overflow-ellipsis whitespace-nowrap">
           {todo.title}
         </span>
       )}
